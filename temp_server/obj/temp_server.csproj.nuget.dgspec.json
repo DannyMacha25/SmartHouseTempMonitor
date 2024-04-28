@@ -1,0 +1,67 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj",
+        "projectName": "temp_server",
+        "projectPath": "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj",
+        "packagesPath": "C:\\Users\\piegu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\piegu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Makaretu.Dns.Multicast": {
+              "target": "Package",
+              "version": "[0.27.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+All files to a home IOT type project that monitors room temperatures
