@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj": {}
+    "C:\\Users\\piegu\\Documents\\Projects\\SmartHouseTempMonitor\\temp_server\\temp_server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj": {
+    "C:\\Users\\piegu\\Documents\\Projects\\SmartHouseTempMonitor\\temp_server\\temp_server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj",
+        "projectUniqueName": "C:\\Users\\piegu\\Documents\\Projects\\SmartHouseTempMonitor\\temp_server\\temp_server.csproj",
         "projectName": "temp_server",
-        "projectPath": "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj",
+        "projectPath": "C:\\Users\\piegu\\Documents\\Projects\\SmartHouseTempMonitor\\temp_server\\temp_server.csproj",
         "packagesPath": "C:\\Users\\piegu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\obj\\",
+        "outputPath": "C:\\Users\\piegu\\Documents\\Projects\\SmartHouseTempMonitor\\temp_server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\piegu\\AppData\\Roaming\\NuGet\\NuGet.Config"

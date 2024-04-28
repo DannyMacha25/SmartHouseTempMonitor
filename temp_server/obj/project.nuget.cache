@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "X12ueOLec3QVyL4VFMpQBWXWgEQArZ/WtTzn9BOAG+jviFg2gNGZiul7Y9NX1/DAfEZ8ypYfGTJqTue0oCdnVw==",
+  "dgSpecHash": "du1punVLVXFp7H00R0QgtfpyKHPJI38ek38t77qbsUdksiQskU6FzHEXz1X/7DPIRsgbgXoJdLKnBZJnfZUiVA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\piegu\\Documents\\Projects\\Smart House Temp Monitor\\temp_server\\temp_server.csproj",
+  "projectFilePath": "C:\\Users\\piegu\\Documents\\Projects\\SmartHouseTempMonitor\\temp_server\\temp_server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\piegu\\.nuget\\packages\\common.logging\\3.4.1\\common.logging.3.4.1.nupkg.sha512",
     "C:\\Users\\piegu\\.nuget\\packages\\common.logging.core\\3.4.1\\common.logging.core.3.4.1.nupkg.sha512",

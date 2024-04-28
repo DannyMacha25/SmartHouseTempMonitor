@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = temp_server
-build_property.ProjectDir = C:\Users\piegu\Documents\Projects\Smart House Temp Monitor\temp_server\
+build_property.ProjectDir = C:\Users\piegu\Documents\Projects\SmartHouseTempMonitor\temp_server\
