@@ -21,7 +21,7 @@ def ConnectToServer(wlan):
     
     s = socket.socket()
     try:
-        s.connect(('192.168.0.28',1024)) # NOTE: Parametrize
+        s.connect(('192.168.50.173',1024)) # NOTE: Parametrize
     except:
         print('[Network] Connection failed... Trying again...')  
     
@@ -46,6 +46,7 @@ def CollectTempData(roms, ds_sensor):
     except:
         print('Connection Bad 1')
         time.sleep(1)
+        return -200
     for rom in roms:
         tempC = 0
         try:
