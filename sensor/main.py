@@ -1,8 +1,18 @@
 import machine, onewire, ds18x20, time
 import network
 import socket
+
 from time import sleep
 from secrets import Secret
+from umqtt.simple import MQTTClient
+import json
+
+MQTT = 0
+SERVER = 1
+
+# CONFIG
+CONNECTION_TYPE = MQTT
+DEVICE_ID = '01'
 
 def ConnectToWifi():
     #Connect to WLAN
@@ -27,11 +37,10 @@ def ConnectToServer(wlan):
     
     # Initialize connection to Server
     device_type = 'p'
-    device_id = '01' # NOTE: Parametrize
     print('[Newtwork] Connected, sending initialization data...')
     sleep(1)
     try:
-        message = '%s %s'%(device_type, device_id)
+        message = '%s %s'%(device_type, DEVICE_ID)
         s.send(message.encode())
         print('[Network] Succesfully sent device info to Server!')
     except:
@@ -39,6 +48,20 @@ def ConnectToServer(wlan):
     
     # Return reference to socket
     return s
+
+def ConfigureMQTT():
+    mqtt_host = '192.168.50.134' # Parameterize
+    mqtt_username = Secret.mqtt_username
+    mqtt_password = Secret.mqtt_password
+    mqtt_client_id = DEVICE_ID
+    
+    mqtt_client = MQTTClient(
+        client_id=mqtt_client_id,
+        server=mqtt_host,
+        user=mqtt_username,
+        password=mqtt_password)
+    
+    return mqtt_client
 
 def CollectTempData(roms, ds_sensor):
     try:
@@ -55,6 +78,20 @@ def CollectTempData(roms, ds_sensor):
             print('Connection Bad')
         tempF = tempC * (9/5) + 32
         return tempF
+    
+def DiscoveryMQTT(client):
+    output_json = {
+    "name" : "null",
+    "state_topic" : "sensor/temperature/" + DEVICE_ID,
+    "unique_id" : "temp01",
+    "unit_of_measurement" : "°F",
+    "device": {"name" : "Temp Sensor", "identifiers" : ["temp01"]}
+    }
+    mqtt_discovery_topic = 'homeassistant/sensor/temp' + DEVICE_ID +'/config'
+    
+    json_obj = json.dumps(output_json)
+    
+    client.publish(mqtt_discovery_topic, json_obj)
 
 
 def main():
@@ -83,18 +120,31 @@ def main():
     print('[Debug] Temp: %f'%(temp))
     sleep(1)
 
-    # Connect to Server
-    s = ConnectToServer(wlan)
-    
+    # Connect to Server/MQTT
+    if CONNECTION_TYPE == SERVER:
+        s = ConnectToServer(wlan)
+    elif CONNECTION_TYPE == MQTT:
+        mqtt_client = ConfigureMQTT()
+        mqtt_publish_topic = 'sensor/temperature/' + DEVICE_ID
+        mqtt_client.connect()
+        #DiscoveryMQTT(mqtt_client) dont work
+        
+        
     # Send temperature data
     while True:
         temp = CollectTempData(roms, ds_sensor)
         sleep(2)
-        try:
-            s.send(('t ' + str(temp)).encode()) # Send temperature in F
-        except:
-            print('[Network] Lost connection, retrying...')
-            s = ConnectToServer(wlan)
+        if CONNECTION_TYPE == SERVER:
+            try:
+                s.send(('t ' + str(temp)).encode()) # Send temperature in F
+            except:
+                print('[Network] Lost connection, retrying...')
+                s = ConnectToServer(wlan)
+        elif CONNECTION_TYPE == MQTT:
+            try:
+                mqtt_client.publish(mqtt_publish_topic,str(temp))
+            except:
+                print('Could not publish, aw well')
         
     s.close()
         

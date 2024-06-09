@@ -178,7 +178,7 @@ class Program
             
             if (data[0] == 't') {
                 float temp = float.Parse(data.Substring(2)); // Read temp
-                Console.WriteLine(String.Format("Temp from Device {0}: {1}", parameters.device_id, temp));
+                //Console.WriteLine(String.Format("Temp from Device {0}: {1}", parameters.device_id, temp));
 
                 // If in good time, upload temp to the database
                 DateTime now = DateTime.Now;
