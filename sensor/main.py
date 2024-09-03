@@ -6,15 +6,22 @@ from time import sleep
 from secrets import Secret
 from umqtt.simple import MQTTClient
 import json
-
 MQTT = 0
 SERVER = 1
 
+# Read config file
+with open('config.json', 'r') as file:
+    config = json.load(file)
+
 # CONFIG
-CONNECTION_TYPE = MQTT
-DEVICE_ID = '01'
+CONNECTION_TYPE = MQTT # Hardset
+DEVICE_ID = config['device_id']
+IP = config['ip']
 
 def ConnectToWifi():
+    """
+    Connects the raspberry pi to the network
+    """
     #Connect to WLAN
     print('[Network] Beginning connection to wifi...')
     wlan = network.WLAN(network.STA_IF)
@@ -24,7 +31,11 @@ def ConnectToWifi():
         print('[Network] Waiting for connection...')
         sleep(1)
     return wlan
+
 def ConnectToServer(wlan):
+    """
+    Connects the raspberry pi to the custom server, if in server mode
+    """
     own_ip = wlan.ifconfig()[0]
     print('[Prog] Connected to Wifi.')
     print('[Network] Connecting to server...')
@@ -50,7 +61,13 @@ def ConnectToServer(wlan):
     return s
 
 def ConfigureMQTT():
-    mqtt_host = '192.168.50.134' # Parameterize
+    """
+    Configures an MQTT client object
+    
+    Returns
+        mqtt_cleint : MQTTClient object
+    """
+    mqtt_host = IP # Parameterize
     mqtt_username = Secret.mqtt_username
     mqtt_password = Secret.mqtt_password
     mqtt_client_id = DEVICE_ID
@@ -64,6 +81,12 @@ def ConfigureMQTT():
     return mqtt_client
 
 def CollectTempData(roms, ds_sensor):
+    """
+    Collects data from the connected temperature sensor
+    
+    Returns
+        tempF: Float
+    """
     try:
         ds_sensor.convert_temp()
     except:
@@ -80,10 +103,14 @@ def CollectTempData(roms, ds_sensor):
         return tempF
     
 def DiscoveryMQTT(client):
+    """
+    Creates and publishes a discovery request, made for HomeAssistant
+    NOTE: Never got this to work :(
+    """
     output_json = {
     "name" : "null",
     "state_topic" : "sensor/temperature/" + DEVICE_ID,
-    "unique_id" : "temp01",
+    "unique_id" : "temp" + DEVICE_ID,
     "unit_of_measurement" : "°F",
     "device": {"name" : "Temp Sensor", "identifiers" : ["temp01"]}
     }
@@ -95,6 +122,10 @@ def DiscoveryMQTT(client):
 
 
 def main():
+    """
+    Where all of the magic happens!
+    """
+    
     # Start Client!
     print('[Prog] Program Starting')
     
@@ -105,7 +136,7 @@ def main():
     except KeyboardInterrupt:
         machine.reset()
     
-    # Initialize Temperature Hardware
+    # Initialize Sensor Hardware
     ds_pin = machine.Pin(21) # NOTE: Parametrize
     ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
     roms = ds_sensor.scan()
@@ -121,32 +152,37 @@ def main():
     sleep(1)
 
     # Connect to Server/MQTT
+    server = None
     if CONNECTION_TYPE == SERVER:
-        s = ConnectToServer(wlan)
+        server = ConnectToServer(wlan)
     elif CONNECTION_TYPE == MQTT:
         mqtt_client = ConfigureMQTT()
         mqtt_publish_topic = 'sensor/temperature/' + DEVICE_ID
         mqtt_client.connect()
-        #DiscoveryMQTT(mqtt_client) dont work
         
-        
+
+    #NOTE: Maybe add median stuff later
     # Send temperature data
     while True:
-        temp = CollectTempData(roms, ds_sensor)
+        temp = CollectTempData(roms, ds_sensor) # Collect temp
         sleep(2)
+        
         if CONNECTION_TYPE == SERVER:
             try:
-                s.send(('t ' + str(temp)).encode()) # Send temperature in F
+                output = np.median(temperature_array)
+                server.send(('t ' + str(temp)).encode()) # Send temperature in F
             except:
                 print('[Network] Lost connection, retrying...')
-                s = ConnectToServer(wlan)
+                server = ConnectToServer(wlan)
         elif CONNECTION_TYPE == MQTT:
             try:
                 mqtt_client.publish(mqtt_publish_topic,str(temp))
             except:
                 print('Could not publish, aw well')
-        
-    s.close()
+    
+    # Close connections
+    if server != None:
+        s.close()
         
 if __name__ == '__main__':
     main()

@@ -6,14 +6,18 @@ ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
 roms = ds_sensor.scan()
 print('Found DS devices: ', roms)
 
+pin = 1
+time.sleep(1) 
 while True:
     try:
+        roms = ds_sensor.scan()
+        (f'Found DS devices: ', roms)
         ds_sensor.convert_temp()
     except:
         print('Connection Bad 1')
         time.sleep(1)
         continue
-    time.sleep_ms(75)
+    #time.sleep_ms(75)
     for rom in roms:
         print(rom)
         tempC = 0
@@ -23,4 +27,4 @@ while True:
             print('Connection Bad')
         tempF = tempC * (9/5) + 32
         print('Temperate (F): %.2f'%(tempF))
-        time.sleep(5)
+        time.sleep(1)
